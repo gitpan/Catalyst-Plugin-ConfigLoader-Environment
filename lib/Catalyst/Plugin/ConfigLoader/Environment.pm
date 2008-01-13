@@ -12,11 +12,11 @@ application with environment variables.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -86,18 +86,24 @@ Let's translate a YAML config file:
       EVAL_PERL: 1
     Model::Bar:
       root: "/etc"
+    Model::DBIC:
+      connect_info: [ "dbi:Pg:dbname=foo" ]
 
 into environment variables that would setup the same configuration:
 
     MYAPP_name=MyApp
     MYAPP_title=This is My App!
-    MYAPP_View::Foo_EXTENSION=tt
-    MYAPP_View::Foo_EVAL_PERL=1
-    MYAPP_Model::Bar_root=/etc
+    MYAPP_View__Foo_EXTENSION=tt
+    MYAPP_View__Foo_EVAL_PERL=1
+    MYAPP_Model__Bar_root=/etc
+    MYAPP_Model__DBIC_connect_info=["dbi:Pg:dbname=foo"]
 
-Note that C<bash> can't seem to deal with colons in the names of
-environment variables, so it's best to use something less braindead
-like C<envdir> from C<daemontools> to create them for you.
+Double colons are converted into double underscores.  For
+compatibility's sake, support for the 0.01-style use of
+bourne-incompatible variable names is retained.
+
+The last one should only be passed JSON.  If JSON.pm is not found,
+then YAML.pm will be used instead.
 
 =head1 FUNCTIONS
 
@@ -114,8 +120,21 @@ sub setup {
     grep { /^${prefix}[_](.+)$/ && ($env{$1}=$ENV{$_})} keys %ENV;
 
     foreach my $var (keys %env) {
-	if($var =~ /(Model|View|Controller)::([^_]+)_(.+)$/){
-	    $c->config->{"$1::$2"}->{$3} = $env{"$var"}; 
+	if($var =~ /(Model|View|Controller)(?:::|__)([^_]+)_(.+)$/){
+	    my $comp = "${1}::$2";
+	    my $item = $3;
+	    my $val = $env{"$var"};
+	    if ($val =~ m{^[\[\{]}) {
+	    	eval { require JSON; };
+		if ($@) {
+		    require YAML;
+		    $val = YAML::Load($val);
+		}
+		else {
+		    $val = JSON::jsonToObj($val);
+		}
+	    }
+	    $c->config->{$comp}{$item} = $val;
 	}
 	else {
 	    $c->config->{$var} = $env{$var};

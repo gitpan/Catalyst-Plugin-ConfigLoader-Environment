@@ -14,8 +14,15 @@ sub default : Private {
 }
 
 sub foo : Local { 
-    my ($self, $c) = @_;
-    my $result = $c->view('TestView')->foo;
+    my ($self, $c, $varname) = @_;
+    my $result = $c->view('TestView')->$varname;
+    if (ref $result) {
+        local($Data::Dumper::Purity) = 1;
+        local($Data::Dumper::Indent) = 0;
+        local($Data::Dumper::Varname) = $varname;
+        $result = Dumper($c->view('TestView')->quux);
+	$result =~ s{1}{};
+    }
     $c->res->body($result);
 }
   

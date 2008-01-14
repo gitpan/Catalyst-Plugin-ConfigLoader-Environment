@@ -15,9 +15,7 @@ no_index:
   directory: 
     - inc
     - t
-recommends: 
-  JSON: 0
-  YAML: 0
 requires: 
   Catalyst: 5.7000
-version: 0.03
+  JSON::Any: 0
+version: 0.04

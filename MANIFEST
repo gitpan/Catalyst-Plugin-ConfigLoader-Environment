@@ -22,6 +22,7 @@ t/01-live.t
 t/boilerplate.t
 t/lib/TestApp.pm
 t/lib/TestApp/Controller/Root.pm
+t/lib/TestApp/Model/TestModel.pm
 t/lib/TestApp/View/TestView.pm
 t/pod-coverage.t
 t/pod.t

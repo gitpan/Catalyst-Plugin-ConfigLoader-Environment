@@ -18,4 +18,4 @@ no_index:
 requires: 
   Catalyst: 5.7000
   JSON::Any: 0
-version: 0.04
+version: 0.05

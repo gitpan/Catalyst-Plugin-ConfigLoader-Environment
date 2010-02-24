@@ -1,5 +1,9 @@
 Revision history for Catalyst-Plugin-ConfigLoader-Environment
-
+0.06_01    24 February 2010
+        - Removed NEXT
+        - using MRO::Compat
+        - updated 01-live.t to reflect such
+        - Added self to contributors
 0.05    6 March 2008
         - Allow top-level ::-params (Model__Foo, not just Model__Foo_bar)
         - Allow JSON for all values (not just Model__Foo_bar)

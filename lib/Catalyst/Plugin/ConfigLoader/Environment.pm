@@ -3,7 +3,7 @@ package Catalyst::Plugin::ConfigLoader::Environment;
 use warnings;
 use strict;
 use JSON::Any;
-
+use MRO::Compat;
 =head1 NAME
 
 Catalyst::Plugin::ConfigLoader::Environment - Configure your
@@ -15,7 +15,7 @@ Version 0.05
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06_01';
 
 =head1 SYNOPSIS
 
@@ -120,7 +120,7 @@ Overriding Catalyst' setup routine.
 =cut
 
 sub setup {
-    my $c = shift;
+    my $c    = shift;
     my $prefix = Catalyst::Utils::class2env($c);
     my %env;
     grep { /^${prefix}[_](.+)$/ && ($env{$1}=$ENV{$_})} keys %ENV;
@@ -149,7 +149,7 @@ sub setup {
         $c->config( $var => $val );
     }
     
-    return $c->NEXT::setup(@_);
+    return $c->maybe::next::method(@_);
 }
 
 
@@ -162,6 +162,8 @@ Jonathan Rockway, C<< <jrockway at cpan.org> >>
 mugwump
 
 Ryan D Johnson, C<< <ryan at innerfence.com> >>
+
+Devin J. Austin C<< <dhoss@cpan.org> >>
 
 =head1 BUGS
 

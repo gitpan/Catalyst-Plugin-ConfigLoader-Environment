@@ -10,7 +10,8 @@ include('ExtUtils::AutoInstall');
 
 requires('Catalyst' => '5.7000');
 requires('JSON::Any');
-build_requires('Test::More' => 0);
+requires('MRO::Compat');
+build_requires('Test::More' => 0.88);
 
 auto_install();
 WriteAll();

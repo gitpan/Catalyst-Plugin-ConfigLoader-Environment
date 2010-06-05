@@ -1,4 +1,8 @@
 Revision history for Catalyst-Plugin-ConfigLoader-Environment
+0.07       05 June 2010
+        - removed useless use of grep in void context
+        - using shipit for dist management
+
 0.06       25 February 2010
         - official release
 
@@ -7,6 +11,7 @@ Revision history for Catalyst-Plugin-ConfigLoader-Environment
         - using MRO::Compat
         - updated 01-live.t to reflect such
         - Added self to contributors
+
 0.05    6 March 2008
         - Allow top-level ::-params (Model__Foo, not just Model__Foo_bar)
         - Allow JSON for all values (not just Model__Foo_bar)

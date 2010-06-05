@@ -15,7 +15,7 @@ Version 0.05
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 SYNOPSIS
 
@@ -123,7 +123,9 @@ sub setup {
     my $c    = shift;
     my $prefix = Catalyst::Utils::class2env($c);
     my %env;
-    grep { /^${prefix}[_](.+)$/ && ($env{$1}=$ENV{$_})} keys %ENV;
+    for (keys %ENV) { 
+        m/^${prefix}[_](.+)$/ and $env{$1} = $ENV{$_}; 
+    }
 
     foreach my $var (keys %env) {
         my $val = $env{$var};
